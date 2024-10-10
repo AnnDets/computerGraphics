@@ -1,1 +1,1 @@
-# computerGraphics
+## Labs of computer graphics.
