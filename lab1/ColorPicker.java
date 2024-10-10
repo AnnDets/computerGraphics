@@ -8,13 +8,16 @@ public class ColorPicker extends JFrame {
     private JPanel colorDisplayPanel;
 
     // RGB components
-    private JTextField rField, gField, bField;
+    private JSpinner rSpinner, gSpinner, bSpinner;
+    private JSlider rSlider, gSlider, bSlider;
 
     // HSV components
-    private JTextField hField, sField, vField;
+    private JSpinner hSpinner, sSpinner, vSpinner;
+    private JSlider hSlider, sSlider, vSlider;
 
     // CMYK components
-    private JTextField cField, mField, yField, kField;
+    private JSpinner cSpinner, mSpinner, ySpinner, kSpinner;
+    private JSlider cSlider, mSlider, ySlider, kSlider;
 
     public ColorPicker() {
         setTitle("Color Picker");
@@ -37,23 +40,31 @@ public class ColorPicker extends JFrame {
 
     private JPanel createRGBPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2));
+        panel.setLayout(new GridLayout(4, 3));
 
         panel.add(new JLabel("R:"));
-        rField = new JTextField("255");
-        panel.add(rField);
+        rSpinner = createSpinner(0, 255, 255);
+        rSlider = createSlider(0, 255, 255);
+        linkSpinnerAndSlider(rSpinner, rSlider);
+        panel.add(rSpinner);
+        panel.add(rSlider);
 
         panel.add(new JLabel("G:"));
-        gField = new JTextField("255");
-        panel.add(gField);
+        gSpinner = createSpinner(0, 255, 255);
+        gSlider = createSlider(0, 255, 255);
+        linkSpinnerAndSlider(gSpinner, gSlider);
+        panel.add(gSpinner);
+        panel.add(gSlider);
 
         panel.add(new JLabel("B:"));
-        bField = new JTextField("255");
-        panel.add(bField);
+        bSpinner = createSpinner(0, 255, 255);
+        bSlider = createSlider(0, 255, 255);
+        linkSpinnerAndSlider(bSpinner, bSlider);
+        panel.add(bSpinner);
+        panel.add(bSlider);
 
         JButton updateButton = new JButton("Update Color");
         updateButton.addActionListener(e -> updateColorFromRGB());
-        panel.add(updateButton);
 
         return panel;
     }
@@ -63,20 +74,27 @@ public class ColorPicker extends JFrame {
         panel.setLayout(new GridLayout(4, 2));
 
         panel.add(new JLabel("H:"));
-        hField = new JTextField("360");
-        panel.add(hField);
-
+        hSpinner = createSpinner(0, 360, 360);
+        hSlider = createSlider(0, 360, 360);
+        linkSpinnerAndSlider(hSpinner, hSlider);
+        panel.add(hSpinner);
+        panel.add(hSlider);
         panel.add(new JLabel("S:"));
-        sField = new JTextField("100");
-        panel.add(sField);
+        sSpinner = createSpinner(0, 100, 100);
+        sSlider = createSlider(0, 100, 100);
+        linkSpinnerAndSlider(sSpinner, sSlider);
+        panel.add(sSpinner);
+        panel.add(sSlider);
 
-        panel.add(new JLabel("V:"));
-        vField = new JTextField("100");
-        panel.add(vField);
+        panel.add(new JLabel("L:"));
+        vSpinner = createSpinner(0, 100, 50);
+        vSlider = createSlider(0, 100, 50);
+        linkSpinnerAndSlider(vSpinner, vSlider);
+        panel.add(vSpinner);
+        panel.add(vSlider);
 
         JButton updateButton = new JButton("Update Color");
         updateButton.addActionListener(e -> updateColorFromHSV());
-        panel.add(updateButton);
 
         return panel;
     }
@@ -86,32 +104,43 @@ public class ColorPicker extends JFrame {
         panel.setLayout(new GridLayout(5, 2));
 
         panel.add(new JLabel("C:"));
-        cField = new JTextField("0");
-        panel.add(cField);
+        cSpinner = createSpinner(0, 100, 0);
+        cSlider = createSlider(0, 100, 0);
+        linkSpinnerAndSlider(cSpinner, cSlider);
+        panel.add(cSpinner);
+        panel.add(cSlider);
 
         panel.add(new JLabel("M:"));
-        mField = new JTextField("0");
-        panel.add(mField);
+        mSpinner = createSpinner(0, 100, 0);
+        mSlider = createSlider(0, 100, 0);
+        linkSpinnerAndSlider(mSpinner, mSlider);
+        panel.add(mSpinner);
+        panel.add(mSlider);
 
         panel.add(new JLabel("Y:"));
-        yField = new JTextField("0");
-        panel.add(yField);
+        ySpinner = createSpinner(0, 100, 0);
+        ySlider = createSlider(0, 100, 0);
+        linkSpinnerAndSlider(ySpinner, ySlider);
+        panel.add(ySpinner);
+        panel.add(ySlider);
 
         panel.add(new JLabel("K:"));
-        kField = new JTextField("0");
-        panel.add(kField);
+        kSpinner = createSpinner(0, 100, 0);
+        kSlider = createSlider(0, 100, 0);
+        linkSpinnerAndSlider(kSpinner, kSlider);
+        panel.add(kSpinner);
+        panel.add(kSlider);
 
         JButton updateButton = new JButton("Update Color");
         updateButton.addActionListener(e -> updateColorFromCMYK());
-        panel.add(updateButton);
 
         return panel;
     }
 
     private void updateColorFromRGB() {
-        int r = Integer.parseInt(rField.getText());
-        int g = Integer.parseInt(gField.getText());
-        int b = Integer.parseInt(bField.getText());
+        int r = (int) rSpinner.getValue();
+        int g = (int) gSpinner.getValue();
+        int b = (int) bSpinner.getValue();
         Color color = new Color(r, g, b);
         updateColor(color);
         updateCMYK(color);
@@ -119,9 +148,9 @@ public class ColorPicker extends JFrame {
     }
 
     private void updateColorFromHSV() {
-        float h = Float.parseFloat(hField.getText());
-        float s = Float.parseFloat(sField.getText()) / 100;
-        float v = Float.parseFloat(vField.getText()) / 100;
+        float h = (int) hSpinner.getValue();
+        float s = (int) sSpinner.getValue() / 100f;
+        float v = (int) vSpinner.getValue() / 100f;
         Color color = Color.getHSBColor(h / 360, s, v);
         updateColor(color);
         updateCMYK(color);
@@ -129,10 +158,10 @@ public class ColorPicker extends JFrame {
     }
 
     private void updateColorFromCMYK() {
-        float c = Float.parseFloat(cField.getText()) / 100;
-        float m = Float.parseFloat(mField.getText()) / 100;
-        float y = Float.parseFloat(yField.getText()) / 100;
-        float k = Float.parseFloat(kField.getText()) / 100;
+        float c = (int) cSpinner.getValue() / 100f;
+        float m = (int) mSpinner.getValue() / 100f;
+        float y = (int) ySpinner.getValue() / 100f;
+        float k = (int) kSpinner.getValue() / 100f;
         int r = (int) ((1 - c) * (1 - k) * 255);
         int g = (int) ((1 - m) * (1 - k) * 255);
         int b = (int) ((1 - y) * (1 - k) * 255);
@@ -154,23 +183,57 @@ public class ColorPicker extends JFrame {
         float c = (1 - r - k) / (1 - k);
         float m = (1 - g - k) / (1 - k);
         float y = (1 - b - k) / (1 - k);
-        cField.setText(String.format("%.0f", c * 100));
-        mField.setText(String.format("%.0f", m * 100));
-        yField.setText(String.format("%.0f", y * 100));
-        kField.setText(String.format("%.0f", k * 100));
+        cSpinner.setValue(Math.round(c * 100));
+        mSpinner.setValue(Math.round(m * 100));
+        ySpinner.setValue(Math.round(y * 100));
+        kSpinner.setValue(Math.round(k * 100));
     }
 
     private void updateHSV(Color color) {
         float[] hsv = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        hField.setText(String.format("%.0f", hsv[0] * 360));
-        sField.setText(String.format("%.0f", hsv[1] * 100));
-        vField.setText(String.format("%.0f", hsv[2] * 100));
+        hSpinner.setValue(Math.round(hsv[0]));
+        sSpinner.setValue(Math.round(hsv[1] * 100));
+        vSpinner.setValue(Math.round(hsv[2] * 100));
     }
 
     private void updateRGB(Color color) {
-        rField.setText(String.valueOf(color.getRed()));
-        gField.setText(String.valueOf(color.getGreen()));
-        bField.setText(String.valueOf(color.getBlue()));
+        rSpinner.setValue(color.getRed());
+        gSpinner.setValue(color.getGreen());
+        bSpinner.setValue(color.getBlue());
+    }
+
+    private JSpinner createSpinner(int min, int max, int initial) {
+        SpinnerNumberModel model = new SpinnerNumberModel(initial, min, max, 1);
+        return new JSpinner(model);
+    }
+
+    private JSlider createSlider(int min, int max, int initial) {
+        JSlider slider = new JSlider(min, max, initial);
+        slider.setMajorTickSpacing(max / 5);
+        slider.setPaintTicks(true);
+        return slider;
+    }
+
+    private void linkSpinnerAndSlider(JSpinner spinner, JSlider slider) {
+        spinner.addChangeListener(e -> {
+            slider.setValue((int) spinner.getValue());
+            updateColorFromCurrentTab();
+        });
+        slider.addChangeListener(e -> {
+            spinner.setValue(slider.getValue());
+            updateColorFromCurrentTab();
+        });
+    }
+
+    private void updateColorFromCurrentTab() {
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        if (selectedIndex == 0) {
+            updateColorFromRGB();
+        } else if (selectedIndex == 1) {
+            updateColorFromHSV();
+        } else if (selectedIndex == 2) {
+            updateColorFromCMYK();
+        }
     }
 
     public static void main(String[] args) {
